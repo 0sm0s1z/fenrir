@@ -1,0 +1,52 @@
+<!--        Global Header       -->
+{% include "includes/header.inc" %}
+
+<!--        Main Navigation       -->
+{% include "includes/topnav.inc" %}
+
+<!-- Main Container --> 
+<div id = "maincont">
+   <div id = "dashboardcont">
+   
+   <!-- LEFT PANE -->
+   
+   <div id = "grid100">
+         <div style="margin-left: auto; margin-right: auto" id = "widgetcont">
+               {% if auth_profiles %}
+                   {% for profile in auth_profiles %}
+                        <div class = "sens" width = "100">
+                           <center>
+                           <img width = "150" src = "/static/images/sensors/{{ profile.system|lower }}.png">
+                           <br><br>{{ profile.alias }}
+                           </center>
+                        </div>
+                   {% endfor %}
+               {% endif %}
+         </div>
+      
+   </div>
+   
+   <!--
+   <div id = "config_panel">
+      <div class = "sidebar_header">
+         Sensors     
+      </div>
+      <ul class = "sidebar_list">
+      {% if auth_profiles %}
+          {% for profile in auth_profiles %}
+               <a href = "#" name = "{{ profile.id }}settings"><li>{{ profile.alias }}</li></a>
+          {% endfor %}
+      {% endif %}
+      </ul>
+   
+
+ 
+   </div>
+   -->
+</div>
+
+
+
+
+</body>
+</html>

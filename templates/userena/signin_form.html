@@ -1,0 +1,56 @@
+{% extends 'userena/signin.html' %}
+{% load i18n %}
+{% load url from future %}
+
+{% block title %}{% trans "Signin" %}{% endblock %}
+
+{% block content %}
+<script>
+function onpassicon()
+{
+document.getElementById("pass").style.color = "rgb(250, 250, 40)";
+}
+function offpassicon()
+{
+document.getElementById("pass").style.color = "#c7c2c2";
+}
+function onusericon()
+{
+document.getElementById("user").style.color = "rgb(250, 250, 40)";
+}
+function offusericon()
+{
+document.getElementById("user").style.color = "#c7c2c2";
+}
+</script>
+  
+  
+<div id = "signinheader"><span class = "title">Fenrir</span><span class = "flavor">Unified Defense Console</span></div>
+<br>
+<form class = "signinform" action="" method="post">
+  {% csrf_token %}
+    {{ form.non_field_errors }}
+    {% for field in form %}
+      {{ field.errors }}
+      {% comment %} Displaying checkboxes differently {% endcomment %}
+      {% if field.name == 'remember_me' %}
+      <p class="checkbox">
+      &nbsp;&nbsp;&nbsp;<label for="id_{{ field.name }}">{{ field }} {{ field.label }}</label>
+      </p>
+      {% else %}
+      <p class="element">
+      {{ field }}
+      {% if field.name == 'identification' %}
+         <span class="icon-user" id = "user"></span>
+      {% elif field.name == 'password' %}
+         <span class="icon-lock" id = "pass"></span>      
+      {% endif %}
+      </p>
+      {% endif %}
+    {% endfor %}
+  <center>
+  <input type="submit" value="{% trans "Sign In" %}" />
+  </center>
+</form>
+
+{% endblock %}

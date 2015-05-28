@@ -1,0 +1,238 @@
+<!--        Global Header       -->
+{% include "includes/header.inc" %}
+
+<!--        Function Library       -->
+{% include "includes/scripts.inc" %}
+
+<!--        Main Navigation       -->
+{% include "includes/topnav.inc" %}
+
+<!-- Main Container --> 
+<div id = "maincont">
+   <div id = "config_panel">
+      <div class = "sidebar_header">
+         Defense Console       
+      </div>
+      <ul class = "sidebar_list">
+         <a href = "/configure/" name = "alerts"><li>Active Alerts</li></a>
+         <a href = "#" name = "netpol"><li>Network Policy</li></a>
+         <a href = "#" name = "agentctrl"><li>Agent Controls</li></a>
+         <a href = "#" name = "newsys"><li>Add New System</li></a>
+      </ul>
+      
+      
+<script type="text/javascript">
+{% if auth_profiles %}
+    {% for profile in auth_profiles %}
+    
+$(document).ready(function () {
+  
+        //select all the a tags named startpwn
+    $('a[name={{ profile.id }}]').click(function(e) {
+            //Cancel the link behavior
+        e.preventDefault();
+            //Get the A tag
+        var id = $(this).attr('href');
+        
+        $("#systems_list").hide();
+        document.getElementById("systems_header").innerHTML = "Systems -- {% if profile.alias %}{{ profile.alias }}{% else %}{{ profile.host }}{% endif %} <a class = 'sidebar' href ='#'><div id = 'sysop' style = 'float: right; margin-top: 10px'> <span onclick=showsys('{{ profile.id }}controls') class='icon-cancel-circle'></span></div></a>";
+        $("#{{ profile.id }}controls").show("slow");
+        hideConfigMain()
+        $("#{{ profile.id }}rules").show();
+        //$(".autogate").fadeOut("slow");
+    }); 
+});
+
+   {% endfor %}
+{% endif %}
+
+
+
+$(document).ready(function () {
+        //select all the a tags named startpwn
+    $('a[name=netpol]').click(function(e) {
+            //Cancel the link behavior
+        e.preventDefault();
+            //Get the A tag
+        var id = $(this).attr('href');
+        
+        hideConfigMain();
+        $("#systems_header").show();
+        if ($("#sysop").is(":visible") == false ) {
+           $("#systems_list").show();
+        }
+        $("#netpol").show();
+        $("#netrules").show();
+    }); 
+});
+
+
+
+
+function showsys(hidden)
+{
+   hideConfigMain();
+   $("#" + hidden).hide();
+   $("#systems_header").show();
+   $("#systems_list").show();
+   document.getElementById("systems_header").innerHTML = "Systems";
+   $("#netpol").show();
+   $("#netrules").show();
+}
+</script>
+      
+      
+      
+      
+      <div id = "systems_header" class = "sidebar_header">
+         Systems
+      </div>
+      <div id = "systems_list">
+         <ul class = "sidebar_list">
+            {% if auth_profiles %}
+                {% for profile in auth_profiles %}
+                  {% if profile.alias %}
+                     <a href = "#{{ profile.id }}" name = "{{ profile.id }}"><li>{{ profile.alias }}</li></a>
+                  {% else %}
+                     <a href = "#{{ profile.id }}" name = "{{ profile.id }}"><li>{{ profile.host }}</li></a>
+                  {% endif %}
+                {% endfor %}
+            {% endif %}
+         </ul>
+      </div>
+      {% if auth_profiles %}
+          {% for profile in auth_profiles %}
+               <div id = "{{ profile.id }}controls" style = "display: none">
+                  <ul class = "sidebar_list">
+                     <a href = "#" name = "{{ profile.id }}sensors"><li>Sensors</li></a>
+                     <a href = "#" name = "{{ profile.id }}rules"><li>Rules</li></a>
+                     <a href = "#" name = "newrule"><li>New Rule</li></a>
+                     <a href = "#" name = "{{ profile.id }}stuff"><li>Stuff</li></a>
+                  </ul>
+               </div>
+          {% endfor %}
+      {% endif %}
+      <div class = "sidebar_header">
+         Event Filters      
+      </div>
+      <ul class = "sidebar_list">
+         <a href = "/ioc/"><li>Last 5 Unique Events</li></a>
+         <a href = "/events/"><li>Top 5 Sensors</li></a>
+         <a href = "/events/"><li>Top 25 Unique Today</li></a>
+         <a href = "/ioc/"><li>Filter by Security Zone</li></a>
+         <a href = "/policy/"><li>Custom Event Filters</li></a>
+      </ul>
+      <div class = "sidebar_header">
+         Policy Filters      
+      </div>
+      <ul class = "sidebar_list">
+         <a href = "/ioc/"><li>Filter by Service</li></a>
+         <a href = "/ioc/"><li>Filter by Security Zone</li></a>
+         <a href = "/policy/"><li>Custom Policy Filter</li></a>
+      </ul>
+   </div>
+   
+   <div id = "config_main">
+		  <!--        ALERTS       -->
+        {% include "includes/alerts.inc" %}
+		  <!--        END_ALERTS   -->
+      <div id = "newsys" style = "display:none">
+
+      </div>
+      
+      <div id = "netpol">
+      {% if auth_profiles %}
+         <div id = "netrules">
+            <table  border = "0"cellspacing = "0" cellpadding = "0"  id = "table1" class="widget_list">
+            <tr class = "widget_bar">
+            <td>Alias</td>
+            <td>Zone</td>
+            <td>Source</td>
+            <td>Destination</td>
+            <td>Protocol</td>
+            <td>Service</td>
+            <td></td>
+            </tr>
+            {% if rules %}
+                {% for rule in rules %}
+                    <tr class = "{% cycle 'widgetrowa' 'widgetrowb' %}">
+                        <td>{{ rule.alias }}</td>
+                        <td>{{ rule.zone }}</td>
+                        <td>{{ rule.source }}</td>
+                        <td>{{ rule.destination }}</td>
+                        <td>{{ rule.protocol }}</td>
+                        <td>{{ rule.service }}</td>
+                        <td><span class='icon-cancel-circle'></span></td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </table>
+         </div>
+      {% endif %}
+      </div>
+
+      {% if auth_profiles %}
+          {% for profile in auth_profiles %}
+               <div id = "{{ profile.id }}rules" style = "display: none">
+                  <table  border = "0"cellspacing = "0" cellpadding = "0"  id = "table1" class="widget_list">
+                  <tr class = "widget_bar">
+                  <td>Sensor</td>
+                  <td>Zone</td>
+                  <td>Source</td>
+                  <td>Destination</td>
+                  <td>Protocol</td>
+                  <td>Service</td>
+                  <td></td>
+                  </tr>
+                  {% if rules %}
+                      {% for rule in rules %}
+                        {% if rule.alias == profile.alias %}
+                          <tr class = "{% cycle 'widgetrowa' 'widgetrowb' %}">
+                              <td>{{ rule.sensor }}</td>
+                              <td>{{ rule.zone }}</td>
+                              <td>{{ rule.source }}</td>
+                              <td>{{ rule.destination }}</td>
+                              <td>{{ rule.protocol }}</td>
+                              <td>{{ rule.service }}</td>
+                              <td><span class='icon-cancel-circle'></span></td>
+                          </tr>
+                        {% endif %}
+                      {% endfor %}
+                  {% endif %}
+                  </table>
+               </div>
+          {% endfor %}
+      {% endif %}
+   </div>
+
+</div>
+
+
+
+
+<script type="text/javascript">
+	//Auto Refresh Loads
+var pLoadRate = "1000";
+var auto_refresh = setInterval(
+function ()
+{
+$('#retval').load('/retval/').fadeIn("slow");
+
+}, pLoadRate);
+</script>
+<div id = "retval">
+
+</div>
+<pre>
+<div id = "terminal_response">
+   <div id = "term_cont"></div>
+</div>
+</pre>
+<div id = "terminal_window" class="terminal">
+</div>
+</body>
+</html>
+
+
+
+

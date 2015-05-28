@@ -1,0 +1,144 @@
+{% if user.is_authenticated %}
+
+<!--        Global Header       -->
+{% include "includes/header.inc" %}
+
+<!--        Main Navigation       -->
+{% include "includes/topnav.inc" %}
+
+
+
+
+<div id = "maincont">
+<div id = "dashboardcont">
+   
+   <!-- LEFT PANE -->
+   
+   <div id = "grid50">
+      <div id = "dnc_widget">
+         <div id = "widgetbar"><div id = "widget_header">Alert Statistics</div></div>
+         <div id = "widgetcont">
+            <table width = "100%">
+               <tr class = "dash-stats">
+                  <td width = "20%" style="background:red"><span class = "alertbytype">{{ extreme }}</span><br>Extreme</td>
+                  <td width = "20%" style="background:orange"><span class = "alertbytype">{{ high }}</span><br>High</td>
+                  <td width = "20%" style="background:rgb(233, 233, 46);"><span class = "alertbytype">{{ elevated }}</span><br>Elevated</td>
+                  <td width = "20%" style="background:rgb(194, 194, 245);"><span class = "alertbytype">{{ moderate }}</span><br>Moderate</td>
+                  <td width = "20%" style="background:rgb(68, 122, 68);"><span class = "alertbytype">{{ low }}</span><br>Low</td>
+               </tr>
+            </table>
+         </div>
+      </div>
+      <div id = "main_widget">
+         <div id = "widgetbar"><div id = "widget_header">Internet Threat Level</div></div>
+         <div id = "widgetcont">
+            <a href="http://isc.sans.edu"><img alt="Internet Storm Center Infocon Status" src="http://isc.sans.edu/images/status.gif"></a>
+         </div>
+      </div>
+      <div id = "main_widget">
+         <div id = "widgetbar"><div id = "widget_header">Last 25 Alerts</div></div>
+         <div id = "widgetcont">
+            <a href = "/configure">
+            {% include "includes/alerts.inc" %}
+            {% include "includes/sync.inc" %}
+            </a>
+         </div>
+      </div>
+   </div>
+   
+   
+   <!-- RIGHT PANE -->
+   
+   <div id = "grid50">
+      <div id = "dnc_widget">
+         <div id = "widgetbar"><div id = "widget_header">Agent Statistics</div></div>
+         <div id = "widgetcont">
+            <table width = "100%">
+               <tr class = "dash-stats">
+                  <td width = "25%"><span class = "alertbytype">{{ active }}</span><br>Active</td>
+                  <td width = "25%"><span class = "alertbytype">{{ online }}</span><br>Online</td>
+                  <td width = "25%"><span class = "alertbytype">0</span><br>Pending</td>
+                  <td width = "25%"><span class = "alertbytype">{{ active }}</span><br>Deployed</td>
+               </tr>
+            </table>
+         </div>
+      </div>
+      <div id = "main_widget">
+         <div id = "widgetbar"><div id = "widget_header">Host Activity</div></div>
+         <div id = "widgetcont">
+            graph by agent traffic
+         </div>
+      </div>
+      <div id = "main_widget">
+         <div id = "widgetbar"><div id = "widget_header">Sensors</div></div>
+         <div id = "widgetcont">
+            <table id = "table1" class="widget_list">
+            <tr class = "widget_bar">
+            <td>Alias</td>
+            <td>Host</td>
+            <td>System</td>
+            <td>Status</td>
+            </tr>
+            {% if auth_profiles %}
+                {% for profile in auth_profiles %}
+                    <tr class = "{% cycle 'widgetrowa' 'widgetrowb' %}">
+                        <td width = "30%">{{ profile.alias }}</td>
+                        <td width = "30%">{{ profile.host }}</td>
+                        <td width = "30%">{{ profile.system }}</td>
+                        <td width = "10%">Online</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </table>
+         </div>
+      </div>
+      <div id = "main_widget">
+         <div id = "widgetbar"><div id = "widget_header">Remote Sessions</div></div>
+         <div id = "widgetcont">
+            
+         </div>
+      </div>
+   </div>
+   <!--
+   <div id = "grid33">
+   <div id = "right_widget">
+      <div id = "widget_header">
+         <span class = "widget_text_strong">Defense Console</span>         
+      </div>
+      <ul class = "widget">
+         <a href = "/configure/"><li>Configure</li></a>
+         <a href = "/policy/"><li>Add New System</li></a>
+         <a href = "/events/"><li>Authentication Profiles</li></a>
+      </ul>
+      
+      <div id = "widget_header">
+         <span class = "widget_text_strong">Security Controls</span>         
+      </div>
+      <ul class = "widget">
+         <a href = "/ioc/"><li>Indicators of Compromise</li></a>
+         <a href = "/policy/"><li>Security Policy</li></a>
+         <a href = "/events/"><li>Events Database</li></a>
+      </ul>
+
+      <div id = "widget_header">
+         <span class = "widget_text_strong">Event Manager</span>         
+      </div>
+      <ul class = "widget">
+         <a href = "/ioc/"><li>Last 5 Unique Events</li></a>
+         <a href = "/events/"><li>Top 5 Sensors</li></a>
+         <a href = "/events/"><li>Top 25 Unique Today</li></a>
+         <a href = "/policy/"><li>Custom Event Filters</li></a
+      </ul>
+   </div>
+   </div>
+   -->
+</div>
+</div>
+
+
+{% else %}
+<meta http-equiv="REFRESH" content="0;url=/accounts/signin/">
+{% endif %}
+
+</body>
+</html>
