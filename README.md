@@ -5,6 +5,6 @@ Video: Coming soon
 
 *Provided by @0sm0s1z*
 
-![alt tag](screenshot1.jpg)
+![alt tag](screenshot1.png)
 
-![alt tag](screenshot2.jpg)
+![alt tag](screenshot2.png)
